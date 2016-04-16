@@ -23,12 +23,11 @@ function setupGameWorld() {
 		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
-	//game.mobs.push(new Berry(200, canvas.height - 10, 5));
-
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.01) {
 			game.mobs.push(new Bush(i, canvas.height - 10, 20));
-			i +=  40;
+			// don't put bushes too close together
+			i += 40;
 		}
 	}
 }
