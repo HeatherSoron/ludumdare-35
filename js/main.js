@@ -49,7 +49,12 @@ function renderGame() {
 
 	ctx.beginPath();
 	
-	ctx.rect(hMid - width/2, top, width, height);
+	ctx.moveTo(hMid, bottom);
+	ctx.lineTo(hMid - width/2, bottom);
+	ctx.bezierCurveTo(hMid - width/2, top, hMid + width/2, top, hMid + width/2, bottom);
+	ctx.lineTo(hMid, bottom);
+
+	ctx.rect(hMid - width/2, top - height*2, width, height);
 
 	ctx.stroke();
 }

@@ -1,6 +1,6 @@
 function init() {
 	initializeCanvas();
-	initializeInput();
+	//initializeInput();
 
 	// setupGameWorld and runGame may need to be defined on a per-game basis
 	setupGameWorld();
