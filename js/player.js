@@ -6,6 +6,8 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
+	this.size = 1;
+
 	this.r = 220;
 	this.b = 220;
 	

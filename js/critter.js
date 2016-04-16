@@ -6,6 +6,8 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
+	this.size = 1;
+
 	this.g = 230;
 	this.b = 255;
 	this.a = 0.8;
@@ -13,17 +15,25 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.z = 1;
 });
 
-Critter.prototype.left = function() { return this.x - this.width/2; }
-Critter.prototype.right = function() { return this.x + this.width/2; }
-Critter.prototype.top = function() { return this.y - this.height; }
+Critter.prototype.left = function() { return this.x - this.size * (this.width/2); }
+Critter.prototype.right = function() { return this.x + this.size * (this.width/2); }
+Critter.prototype.top = function() { return this.y - this.size * (this.height); }
 
 Critter.prototype.sightRadius = function() {
 	return this.width * 3;
 }
 
 Critter.prototype.eat = function(berry) {
-	this.width *= 1.1;
-	this.height *= 1.1;
+	this.size *= 1.1;
+	if (this.size > 1.5) {
+		var newSize = this.size / 2;
+		this.size = newSize;
+		var side = Math.random() <= 0.5 ? -1 : 1;
+		var baby = new Critter(this.x + this.width * 1.3 * side, this.y, this.width, this.height);
+		baby.size = newSize;
+		game.mobs.push(baby);
+	}
+
 	berry.kill();
 }
 
@@ -81,8 +91,8 @@ Critter.prototype.move = function() {
 }
 
 Critter.prototype.render = function() {
-	var halfWidth = this.width/2;
-	var top = this.y - this.height;
+	var halfWidth = this.size * this.width/2;
+	var top = this.top();
 	var bottom = this.y;
 	var hMid = this.x;
 
