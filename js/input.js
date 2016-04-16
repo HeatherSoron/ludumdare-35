@@ -2,7 +2,7 @@ var keysHeld = {};
 
 function handleKeyDown(e) {
 	var keyName = keyMap[e.keyCode];
-	if (keyName) {
+	if (keyName && e.target.tagName != 'TEXTAREA') {
 		keysHeld[keyName] = true;
 		// e.preventDefault is used here to prevent scrolling when the spacebar is pressed
 		e.preventDefault();
@@ -11,7 +11,7 @@ function handleKeyDown(e) {
 
 function handleKeyUp(e) {
 	var keyName = keyMap[e.keyCode];
-	if (keyName) {
+	if (keyName && e.target.tagName != 'TEXTAREA') {
 		keysHeld[keyName] = false;
 		e.preventDefault();
 	}
