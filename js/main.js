@@ -54,8 +54,17 @@ function renderGame() {
 
 	ctx.translate(-game.player.x + canvas.width/2, 0);
 	
+	var layers = [];
 	game.mobs.forEach(function(mob) {
-		mob.render();
+		if (!layers[mob.z]) {
+			layers[mob.z] = [];
+		}
+		layers[mob.z].push(mob);
+	});
+	layers.forEach(function(layer) {
+		layer.forEach(function(mob) {
+			mob.render();
+		});
 	});
 
 	ctx.restore();

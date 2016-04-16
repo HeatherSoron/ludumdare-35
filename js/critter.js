@@ -9,6 +9,8 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.g = 230;
 	this.b = 255;
 	this.a = 0.8;
+
+	this.z = 1;
 });
 
 Critter.prototype.left = function() { return this.x - this.width/2; }

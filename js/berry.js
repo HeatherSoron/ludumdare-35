@@ -6,6 +6,8 @@ Class.makeClass(Mob, function Berry(x, y, size) {
 	this.size = size;
 
 	this.r = 230;
+
+	this.z = 3;
 });
 
 Berry.prototype.left = function() { return this.x - this.size; }

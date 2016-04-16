@@ -8,6 +8,8 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 
 	this.r = 220;
 	this.b = 220;
+	
+	this.z = 2;
 });
 
 Player.prototype.findTouching = function() {
