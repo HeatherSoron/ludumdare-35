@@ -3,4 +3,6 @@ Class.makeClass(Mob, function Player(x, y, width, height) {
 	this.y = y;
 	this.width = width;
 	this.height = height;
+
+	this.speed = 0;
 });

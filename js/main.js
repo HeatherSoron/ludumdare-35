@@ -22,33 +22,18 @@ function runGame() {
 }
 
 function updateGame() {
-	var delta = 0.2;
-	var decay = delta * 2;
-	var max = 3;
+	var x = 0;
+	var y = 0;
 	if (keysHeld.left) {
-		game.speed -= delta;
-		if (game.speed < -max) {
-			game.speed = -max;
-		}
-	} else if (game.speed < 0) {
-		game.speed += decay;
-		if (game.speed > 0) {
-			game.speed = 0;
-		}
+		x -= 1;
 	}
 	if (keysHeld.right) {
-		game.speed += delta;
-		if (game.speed > max) {
-			game.speed = max;
-		}
-	} else if (game.speed > 0) {
-		game.speed -= decay;
-		if (game.speed < 0) {
-			game.speed = 0;
-		}
+		x += 1;
 	}
 
-	game.player.x += game.speed;
+	game.player.accelerate(x, y);
+
+	game.player.move();
 }
 
 function renderGame() {
