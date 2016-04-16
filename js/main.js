@@ -20,7 +20,7 @@ function setupGameWorld() {
 	game.mobs.push(game.player);
 
 	for (var i = 0; i < 4; ++i) {
-		game.mobs.push(new Mob(left * (i + 0.5), y, width, height));
+		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
 }

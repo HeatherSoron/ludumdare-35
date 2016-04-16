@@ -1,4 +1,4 @@
-Class.makeClass(Mob, function Player(x, y, width, height) {
+Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.init();
 
 	this.x = x;
