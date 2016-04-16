@@ -22,7 +22,7 @@ Bush.prototype.render = function() {
 
 Bush.prototype.update = function() {
 	if (this.spawn) {
-		if (this.spawn.grabbedBy) {
+		if (this.spawn.grabbedBy || this.spawn.dead) {
 			this.spawn = null;
 		}
 	} else {
