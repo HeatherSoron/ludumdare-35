@@ -28,6 +28,9 @@ Player.prototype.shapeshift = function(critter) {
 }
 
 Player.prototype.update = function() {
+	var x = 0;
+	var y = 0;
+
 	if (keysHeld.g) {
 		var touching = this.findTouching();
 		if (touching.length) {
@@ -57,9 +60,12 @@ Player.prototype.update = function() {
 		// treat this as a press-then-release key (probably breaking abstraction, but, eh. game jam)
 		keysHeld.t = false;
 	}
+	if (keysHeld.space && this.y >= canvas.height) {
+		console.log('jumping');
+		y = -7;
+		keysHeld.space = false;
+	}
 
-	var x = 0;
-	var y = 0;
 	if (keysHeld.left) {
 		x -= 1;
 	}

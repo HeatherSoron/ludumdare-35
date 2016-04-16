@@ -77,7 +77,7 @@ Critter.prototype.accelerate = function(x, y) {
 			this.fallSpeed = vMax;
 		}
 	} else {
-		this.fallSpeed = 0;
+		this.fallSpeed = y;
 	}
 };
 
