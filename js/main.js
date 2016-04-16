@@ -41,15 +41,17 @@ function renderGame() {
 	// clear the screen before drawing the next frame. Otherwise, each frame would be drawn on top of the last one, which is good for a painting program, but not good for a game
 	clearScreen();
 	
-	// put code in here which handles rendering the game (drawing the player, etc.)
+	var top = 100;
+	var height = 25;
+	var bottom = top + height;
+	var hMid = 100;
+	var width = 40;
 
-	// example code below (commented out)
-/*
-	ctx.fillStyle = 'rgb(0, 0, 0,)';
-	var halfWidth = game.playerWidth / 2;
-	var halfHeight = game.playerHeight / 2;
-	ctx.fillRect(game.playerCenter.x - halfWidth, game.playerCenter.y - halfHeight, game.playerWidth, game.playerHeight);
-*/
+	ctx.beginPath();
+	
+	ctx.rect(hMid - width/2, top, width, height);
+
+	ctx.stroke();
 }
 
 function clearScreen() {

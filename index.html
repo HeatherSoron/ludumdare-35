@@ -11,10 +11,16 @@ canvas {
 	/* by putting a border around the canvas, we can see where it is more easily */
 	border: 1px solid black;
 }
+#debug-info {
+	float: right;
+}
 
 		</style>
 	</head>
 	<body onload="init()">
 		<canvas id="game" width=800 height=600></canvas>
+		<div id="debug-info">
+			<p id="time"></p>
+		</div>
 	</body>
 </html>

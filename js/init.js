@@ -5,6 +5,8 @@ function init() {
 	// setupGameWorld and runGame may need to be defined on a per-game basis
 	setupGameWorld();
 	setInterval(runGame, 1000 / 30);
+
+	document.getElementById('time').innerText = "Game loaded at: " + new Date();
 }
 
 function initializeCanvas() {
