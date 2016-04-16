@@ -6,7 +6,8 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
-	this.g = 255;
+	this.g = 230;
+	this.b = 255;
 	this.a = 0.8;
 });
 
