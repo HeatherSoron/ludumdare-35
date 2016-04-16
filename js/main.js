@@ -11,6 +11,7 @@ function setupGameWorld() {
 	game.tick = 0;
 	game.speed = 0;
 	game.offset = 0;
+	game.player = new Player(100, 100, 40, 25);
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -47,31 +48,14 @@ function updateGame() {
 		}
 	}
 
-	game.offset += game.speed;
+	game.player.x += game.speed;
 }
 
 function renderGame() {
 	// clear the screen before drawing the next frame. Otherwise, each frame would be drawn on top of the last one, which is good for a painting program, but not good for a game
 	clearScreen();
 	
-	var top = 100;
-	var height = 25;
-	var bottom = top + height;
-	var hMid = 100 + game.offset;
-	var width = 40;
-
-	var wobble = Math.sin(game.tick / 5) * 2.5 - game.speed; 
-
-	ctx.beginPath();
-	
-	ctx.moveTo(hMid, bottom);
-	ctx.lineTo(hMid - width/2, bottom);
-	ctx.bezierCurveTo(hMid + wobble - width/2, top, hMid + wobble + width/2, top, hMid + width/2, bottom);
-	ctx.lineTo(hMid, bottom);
-
-	ctx.rect(hMid - game.offset - width/2, top - height*2, width, height);
-
-	ctx.stroke();
+	game.player.render();
 }
 
 function clearScreen() {
