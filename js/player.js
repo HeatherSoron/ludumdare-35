@@ -18,8 +18,13 @@ Player.prototype.findTouching = function() {
 	});
 }
 
+Player.prototype.shapeshift = function(critter) {
+	this.width = critter.width;
+	this.height = critter.height;
+}
+
 Player.prototype.update = function() {
-	if (keysHeld.space) {
+	if (keysHeld.g) {
 		var touching = this.findTouching();
 		if (touching.length) {
 			var self = this;
@@ -37,8 +42,16 @@ Player.prototype.update = function() {
 				}
 			}
 		}
-		// treat space as a press-then-release key (probably breaking abstraction, but, eh. game jam)
-		keysHeld.space = false;
+		// treat this as a press-then-release key (probably breaking abstraction, but, eh. game jam)
+		keysHeld.g = false;
+	}
+	if (keysHeld.t) {
+		var critters = this.findTouching().filter(function(el) { return el instanceof Critter; });
+		if (critters.length) {
+			this.shapeshift(critters[0]);
+		}
+		// treat this as a press-then-release key (probably breaking abstraction, but, eh. game jam)
+		keysHeld.t = false;
 	}
 
 	var x = 0;
