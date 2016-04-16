@@ -23,6 +23,8 @@ function setupGameWorld() {
 		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
+	game.mobs.push(new Berry(200, y - 10, 5));
+
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically

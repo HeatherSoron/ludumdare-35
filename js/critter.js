@@ -1,4 +1,4 @@
-Class.makeClass(Point, function Critter(x, y, width, height) {
+Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.init();
 
 	this.x = x;
@@ -10,19 +10,9 @@ Class.makeClass(Point, function Critter(x, y, width, height) {
 	this.a = 0.8;
 });
 
-Critter.prototype.init = function() {
-	this.speed = 0;
-	this.birthTick = game.tick;
-
-	this.r = 0;
-	this.g = 0;
-	this.b = 0;
-	this.a = 1;
-}
-
-Critter.prototype.getColor = function() {
-	return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
-}
+Critter.prototype.left = function() { return this.x - this.width/2; }
+Critter.prototype.right = function() { return this.x + this.width/2; }
+Critter.prototype.top = function() { return this.y - this.height; }
 
 Critter.prototype.accelerate = function(x, y) {
 	var delta = 0.2;
@@ -76,11 +66,7 @@ Critter.prototype.render = function() {
 	ctx.bezierCurveTo(hMid + wobble - halfWidth, top, hMid + wobble + halfWidth, top, hMid + halfWidth, bottom);
 	ctx.lineTo(hMid, bottom);
 
-	ctx.fillStyle = this.getColor();
-	ctx.fill();
-
-	ctx.strokeStyle = 'black';
-	ctx.stroke();
+	this.drawPath();
 }
 
 Critter.prototype.update = function() {
