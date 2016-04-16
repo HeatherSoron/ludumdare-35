@@ -8,16 +8,12 @@ var game = {};
 function setupGameWorld() {
 	// put game-specific initialization in here
 	
-	// example code below (commented out)
-/*
-	game.playerCenter = { x: 50, y: 50 };
-	game.playerWidth = 20;
-	game.playerHeight = 20;
-*/
+	game.tick = 0;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
 function runGame() {
+	game.tick += 1;
 	updateGame();
 	renderGame();
 }
@@ -47,11 +43,13 @@ function renderGame() {
 	var hMid = 100;
 	var width = 40;
 
+	var wobble = Math.sin(game.tick / 5) * 2.5; 
+
 	ctx.beginPath();
 	
 	ctx.moveTo(hMid, bottom);
 	ctx.lineTo(hMid - width/2, bottom);
-	ctx.bezierCurveTo(hMid - width/2, top, hMid + width/2, top, hMid + width/2, bottom);
+	ctx.bezierCurveTo(hMid + wobble - width/2, top, hMid + wobble + width/2, top, hMid + width/2, bottom);
 	ctx.lineTo(hMid, bottom);
 
 	ctx.rect(hMid - width/2, top - height*2, width, height);
