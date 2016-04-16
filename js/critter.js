@@ -28,6 +28,7 @@ Critter.prototype.accelerate = function(x, y) {
 	var delta = 0.2;
 	var decay = delta * 2;
 	var max = 3;
+	var vMax = 10;
 
 	if (x * this.speed < 0) {
 		// opposing directions. Let's add a bit of extra power
@@ -55,10 +56,25 @@ Critter.prototype.accelerate = function(x, y) {
 	} else if (this.speed > max) {
 		this.speed = max;
 	}
+
+
+	if (this.y < canvas.height) {
+		this.fallSpeed += delta * 2;
+		if (this.fallSpeed > vMax) {
+			this.fallSpeed = vMax;
+		}
+	} else {
+		this.fallSpeed = 0;
+	}
 };
 
 Critter.prototype.move = function() {
 	this.x += this.speed;
+	this.y += this.fallSpeed;
+
+	if (this.y > canvas.height) {
+		this.y = canvas.height;
+	}
 }
 
 Critter.prototype.render = function() {
@@ -68,23 +84,20 @@ Critter.prototype.render = function() {
 	var hMid = this.x;
 
 	var wobble = Math.sin((game.tick - this.birthTick) / 5) * 2.5 - this.speed; 
+	var stretch = this.fallSpeed * 2;
 
 	ctx.beginPath();
 	
 	ctx.moveTo(hMid, bottom);
 	ctx.lineTo(hMid - halfWidth, bottom);
-	ctx.bezierCurveTo(hMid + wobble - halfWidth, top, hMid + wobble + halfWidth, top, hMid + halfWidth, bottom);
+	ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
 	ctx.lineTo(hMid, bottom);
 
 	this.drawPath();
 }
 
-Critter.prototype.update = function() {
-	var xDelta = 0;
-	var yDelta = 0;
-
+Critter.prototype.navToTarget = function() {
 	if (this.target && this.target.dead) {
-		console.log('target is dead');
 		this.target = null;
 	}
 	if (!this.target) {
@@ -105,11 +118,19 @@ Critter.prototype.update = function() {
 		this.eat(this.target);
 	} else {
 		if (this.x > this.target.x) {
-			xDelta = -1;
+			return -1;
 		} else if (this.x < this.target.x) {
-			xDelta = 1;
+			return 1;
 		}
 	}
+
+	return 0;
+}
+
+Critter.prototype.update = function() {
+	var xDelta = this.y == canvas.height ? this.navToTarget() : 0;
+	var yDelta = 0;
+
 
 	this.accelerate(xDelta, yDelta);
 

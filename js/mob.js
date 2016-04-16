@@ -31,6 +31,7 @@ Mob.prototype.kill = function() {
 
 Mob.prototype.init = function() {
 	this.speed = 0;
+	this.fallSpeed = 0;
 	this.birthTick = game.tick;
 
 	this.r = 0;

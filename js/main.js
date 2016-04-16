@@ -23,7 +23,7 @@ function setupGameWorld() {
 		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
-	game.mobs.push(new Berry(200, y - 10, 5));
+	game.mobs.push(new Berry(200, canvas.height - 10, 5));
 
 }
 
