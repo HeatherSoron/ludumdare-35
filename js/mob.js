@@ -13,7 +13,15 @@ Mob.prototype.top = function() { return this.y; }
 Mob.prototype.bottom = function() { return this.y; }
 
 Mob.prototype.getBounds = function() {
-	return new Rectangle(this.left(), this.top(), this.right(), this.bottom());
+	var l = this.left();
+	var t = this.top();
+	var r = this.right();
+	var b = this.bottom();
+	return new Rectangle(l, t, r-l, b-t);
+}
+
+Mob.prototype.kill = function() {
+	this.dead = true;
 }
 
 Mob.prototype.init = function() {

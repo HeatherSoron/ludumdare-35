@@ -14,6 +14,12 @@ Critter.prototype.left = function() { return this.x - this.width/2; }
 Critter.prototype.right = function() { return this.x + this.width/2; }
 Critter.prototype.top = function() { return this.y - this.height; }
 
+Critter.prototype.eat = function(berry) {
+	this.width *= 1.1;
+	this.height *= 1.1;
+	berry.kill();
+}
+
 Critter.prototype.accelerate = function(x, y) {
 	var delta = 0.2;
 	var decay = delta * 2;

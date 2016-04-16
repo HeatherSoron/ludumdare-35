@@ -38,6 +38,7 @@ function updateGame() {
 	game.mobs.forEach(function(mob) {
 		mob.update();
 	});
+	game.mobs = game.mobs.filter(function(el) { return !el.dead; });
 }
 
 function renderGame() {

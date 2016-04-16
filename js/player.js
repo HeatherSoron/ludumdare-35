@@ -26,7 +26,10 @@ Player.prototype.update = function() {
 			var grabbed = touching.filter(function(el) { return el.grabbedBy == self; }); 
 
 			if (grabbed.length) {
-				
+				var critters = touching.filter(function(el) { return el instanceof Critter; });
+				if (critters.length) {
+					critters[0].eat(grabbed[0]);
+				}
 			} else {
 				var berries = touching.filter(function(el) { return el instanceof Berry; });
 				if (berries.length) {
