@@ -1,4 +1,4 @@
-Class.makeClass(null, function Mob(x, y, width, height) {
+Class.makeClass(Point, function Mob(x, y, width, height) {
 	this.init();
 
 	this.x = x;
