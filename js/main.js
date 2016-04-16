@@ -9,6 +9,8 @@ function setupGameWorld() {
 	// put game-specific initialization in here
 	
 	game.tick = 0;
+	game.speed = 0;
+	game.offset = 0;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -19,18 +21,33 @@ function runGame() {
 }
 
 function updateGame() {
-	// put code in here which handles the game logic (moving the player, etc.)
-	
-	// example code below (commented out)
-/*
-	var playerSpeed = 1;
+	var delta = 0.2;
+	var decay = delta * 2;
+	var max = 3;
 	if (keysHeld.left) {
-		game.playerCenter.x -= playerSpeed;
+		game.speed -= delta;
+		if (game.speed < -max) {
+			game.speed = -max;
+		}
+	} else if (game.speed < 0) {
+		game.speed += decay;
+		if (game.speed > 0) {
+			game.speed = 0;
+		}
 	}
 	if (keysHeld.right) {
-		game.playerCenter.x += playerSpeed;
+		game.speed += delta;
+		if (game.speed > max) {
+			game.speed = max;
+		}
+	} else if (game.speed > 0) {
+		game.speed -= decay;
+		if (game.speed < 0) {
+			game.speed = 0;
+		}
 	}
-*/
+
+	game.offset += game.speed;
 }
 
 function renderGame() {
@@ -40,10 +57,10 @@ function renderGame() {
 	var top = 100;
 	var height = 25;
 	var bottom = top + height;
-	var hMid = 100;
+	var hMid = 100 + game.offset;
 	var width = 40;
 
-	var wobble = Math.sin(game.tick / 5) * 2.5; 
+	var wobble = Math.sin(game.tick / 5) * 2.5 - game.speed; 
 
 	ctx.beginPath();
 	
@@ -52,7 +69,7 @@ function renderGame() {
 	ctx.bezierCurveTo(hMid + wobble - width/2, top, hMid + wobble + width/2, top, hMid + width/2, bottom);
 	ctx.lineTo(hMid, bottom);
 
-	ctx.rect(hMid - width/2, top - height*2, width, height);
+	ctx.rect(hMid - game.offset - width/2, top - height*2, width, height);
 
 	ctx.stroke();
 }
