@@ -12,6 +12,11 @@ Mob.prototype.right = function() { return this.x; }
 Mob.prototype.top = function() { return this.y; }
 Mob.prototype.bottom = function() { return this.y; }
 
+Mob.prototype.isTouching = function(other) {
+	var bb = this.getBounds();
+	return other.getBounds().intersects(bb);
+}
+
 Mob.prototype.getBounds = function() {
 	var l = this.left();
 	var t = this.top();

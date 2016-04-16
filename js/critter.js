@@ -14,6 +14,10 @@ Critter.prototype.left = function() { return this.x - this.width/2; }
 Critter.prototype.right = function() { return this.x + this.width/2; }
 Critter.prototype.top = function() { return this.y - this.height; }
 
+Critter.prototype.sightRadius = function() {
+	return this.width * 3;
+}
+
 Critter.prototype.eat = function(berry) {
 	this.width *= 1.1;
 	this.height *= 1.1;
@@ -76,4 +80,38 @@ Critter.prototype.render = function() {
 }
 
 Critter.prototype.update = function() {
+	var xDelta = 0;
+	var yDelta = 0;
+
+	if (this.target && this.target.dead) {
+		console.log('target is dead');
+		this.target = null;
+	}
+	if (!this.target) {
+		var berries = game.mobs.filter(function(el) { return el instanceof Berry; });
+		var nearest = null;
+		var maxDist = this.sightRadius();
+		var self = this;
+		berries.forEach(function(berry) {
+			var dist = berry.distTo(self);
+			if (dist < maxDist) {
+				if (!nearest || nearest.distTo(self) > dist) {
+					nearest = berry;
+				}
+			}
+		});
+		this.target = nearest;
+	} else if (this.isTouching(this.target)) {
+		this.eat(this.target);
+	} else {
+		if (this.x > this.target.x) {
+			xDelta = -1;
+		} else if (this.x < this.target.x) {
+			xDelta = 1;
+		}
+	}
+
+	this.accelerate(xDelta, yDelta);
+
+	this.move();
 }

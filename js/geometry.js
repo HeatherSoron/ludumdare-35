@@ -16,6 +16,10 @@ Point.prototype.lenSqrd = function() {
 	return (this.x * this.x) + (this.y * this.y);
 }
 
+Point.prototype.distTo = function(other) {
+	return this.minus(other).length();
+}
+
 Point.prototype.isZero = function() {
 	return !(this.x || this.y);
 }
