@@ -176,7 +176,7 @@ Critter.prototype.isGrounded = function() {
 	var platforms = game.mobs.filter(function(el) { return el.isPlatform; });
 	for (var i = 0; i < platforms.length; ++i) {
 		var p = platforms[i];
-		if (Math.abs(this.x - p.x) < (this.width/2 * this.size + p.width/2 * p.size)) {
+		if (p != this && Math.abs(this.x - p.x) < (this.width/2 * this.size + p.width/2 * p.size)) {
 			if (this.y >= p.top()) {
 				return true;
 			}
