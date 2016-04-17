@@ -12,9 +12,11 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 
 	this.g = 230;
 	this.b = 255;
-	this.a = 1;
 
 	this.z = 1;
+
+	this.lastEat = game.tick;
+	this.setHealth(100);
 
 	this.body = new SlimeBody(0, 0, this);
 	this.bodyParts = [];
@@ -27,6 +29,19 @@ Critter.prototype.top = function() { return this.y - this.size * (-this.body.y +
 
 Critter.prototype.sightRadius = function() {
 	return this.width * 3;
+}
+
+Critter.prototype.fitness = function() {
+	return this.health * this.size;
+}
+
+Critter.prototype.setHealth = function(health) {
+	var minHealth = 40;
+	if (health < minHealth) {
+		health = minHealth;
+	}
+	this.health = health;
+	this.a = health/100.0;
 }
 
 Critter.prototype.growPair = function(partClass, x, y) {
@@ -84,6 +99,9 @@ Critter.prototype.eat = function(berry) {
 		baby.shapeshift(this);
 		game.mobs.push(baby);
 	}
+
+	this.lastEat = game.tick;
+	this.setHealth(100);
 
 	berry.kill();
 }
@@ -210,12 +228,36 @@ Critter.prototype.navToTarget = function() {
 		}
 	}
 
+	if (!this.health < 80 && (!this.target || this.target.y < this.top())) {
+		var self = this;
+		var prey = game.mobs.filter(function(el) { return el instanceof Critter && el != self && el.health < 50 && el.fitness() < self.fitness(); });
+		var nearest = null;
+		var maxDist = this.sightRadius() * 2;
+		prey.forEach(function(critter) {
+			if (critter != self) {
+				var dist = critter.distTo(self);
+				if (dist < maxDist) {
+					if (!nearest || nearest.distTo(self) > dist) {
+						nearest = critter;
+					}
+				}
+			}
+		});
+		if (nearest) {
+			this.target = nearest;
+		}
+	}
+
 	return 0;
 }
 
 Critter.prototype.update = function() {
 	var xDelta = this.y == canvas.height ? this.navToTarget() : 0;
 	var yDelta = 0;
+
+	if (this.lastEat + 100 < game.tick && Math.random() < 0.1) {
+		this.setHealth(this.health - 5);
+	}
 
 	this.accelerate(xDelta, yDelta);
 

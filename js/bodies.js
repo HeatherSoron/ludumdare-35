@@ -21,6 +21,12 @@ BodyPart.prototype.setOwner = function(owner) {
 	this.a = owner.a;
 }
 
+BodyPart.prototype.parentDrawPath = BodyPart.prototype.drawPath;
+BodyPart.prototype.drawPath = function() {
+	this.a = this.owner.a;
+	this.parentDrawPath();
+}
+
 
 /* BODY PART: SlimeBody */
 
