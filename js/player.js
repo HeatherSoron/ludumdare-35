@@ -9,6 +9,8 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.size = 1;
 	this.stiffness = 0;
 
+	this.wobbleRate = 1;
+
 	this.r = 220;
 	this.b = 220;
 	

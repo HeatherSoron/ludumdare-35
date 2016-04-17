@@ -9,6 +9,8 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.size = 1;
 	this.stiffness = 0;
 
+	this.wobbleRate = (Math.random() - 0.5) / 2;
+
 	this.g = 230;
 	this.b = 255;
 	this.a = 0.8;
@@ -112,7 +114,7 @@ Critter.prototype.definePath = function() {
 	var bottom = this.y;
 	var hMid = this.x;
 
-	var wobble = this.size * (Math.sin((game.tick - this.birthTick) / 5) * 2.5 - this.speed); 
+	var wobble = this.size * (Math.sin((game.tick - this.birthTick) / (4.75 + this.wobbleRate)) * 2.5 - this.speed); 
 	var stretch = this.size * this.fallSpeed * 2;
 
 	var side = halfWidth + this.stiffness * 100 * this.size;
