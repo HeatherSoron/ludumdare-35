@@ -135,7 +135,23 @@ Critter.prototype.render = function() {
 Critter.prototype.navToTarget = function() {
 	if (this.target && this.target.dead) {
 		this.target = null;
+		this.minTargetDist = undefined;
+
 	}
+
+	if (this.target) {
+		var distToTarget = this.target.distTo(this);
+		if (this.minTargetDist === undefined || distToTarget < this.minTargetDist) {
+			this.minTargetDist = distToTarget;
+			this.lastApproachTick = game.tick;
+		} else if (this.lastApproachTick < game.tick + 10) {
+			if (Math.random() < 0.5) {
+				this.target = null;
+				this.minTargetDist = undefined;
+			}
+		}
+	}
+
 	if (!this.target) {
 		var berries = game.mobs.filter(function(el) { return el instanceof Berry; });
 		var nearest = null;
