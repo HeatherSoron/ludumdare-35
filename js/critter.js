@@ -16,6 +16,9 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.a = 0.8;
 
 	this.z = 1;
+
+	this.body = new SlimeBody(x, y, this);
+	this.bodyParts = [];
 });
 
 Critter.prototype.left = function() { return this.x - this.size * (this.width/2); }
@@ -26,16 +29,29 @@ Critter.prototype.sightRadius = function() {
 	return this.width * 3;
 }
 
+Critter.prototype.growPair = function(partClass, x, y) {
+	this.bodyParts.push(new partClass(x, y, this, false));
+	this.bodyParts.push(new partClass(-x, y, this, true));
+}
+
 Critter.prototype.shapeshift = function(critter) {
 	this.width = critter.width;
 	this.height = critter.height;
 	this.stiffness = critter.stiffness;
+	this.body = critter.body.clone(this);
+	this.bodyParts = [];
+
+	var self = this;
+	critter.bodyParts.forEach(function(part) {
+		self.bodyParts.push(part.clone(self));
+	});
 }
 
 Critter.prototype.eat = function(berry) {
 	switch (berry.type) {
 		case 'stiffen':
 			this.stiffness = 1;
+			this.growPair(LegPart, this.width * 0.2, -this.height/2);
 			break;
 		default:
 			// nothing
@@ -108,26 +124,11 @@ Critter.prototype.move = function() {
 	}
 }
 
-Critter.prototype.definePath = function() {
-	var halfWidth = this.size * this.width/2;
-	var top = this.top();
-	var bottom = this.y;
-	var hMid = this.x;
-
-	var wobble = this.size * (Math.sin((game.tick - this.birthTick) / (4.75 + this.wobbleRate)) * 2.5 - this.speed); 
-	var stretch = this.size * this.fallSpeed * 2;
-
-	var side = halfWidth + this.stiffness * 100 * this.size;
-	
-	ctx.moveTo(hMid, bottom);
-	ctx.lineTo(hMid - halfWidth, bottom);
-	if (this.stiffness) {
-		ctx.lineTo(hMid + wobble, top - stretch);
-		ctx.lineTo(hMid + halfWidth, bottom);
-	} else {
-		ctx.bezierCurveTo(hMid + wobble - side, top - stretch, hMid + wobble + side, top - stretch, hMid + halfWidth, bottom);
-	}
-	ctx.lineTo(hMid, bottom);
+Critter.prototype.render = function() {
+	this.bodyParts.forEach(function(el) {
+		el.render();
+	});
+	this.body.render();
 }
 
 Critter.prototype.navToTarget = function() {

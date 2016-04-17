@@ -15,6 +15,9 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.b = 220;
 	
 	this.z = 2;
+
+	this.body = new SlimeBody(x, y, this);
+	this.bodyParts = [];
 });
 
 Player.prototype.findTouching = function() {
