@@ -19,11 +19,12 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 
 	this.body = new SlimeBody(0, 0, this);
 	this.bodyParts = [];
+	this.calcBodyDetails();
 });
 
 Critter.prototype.left = function() { return this.x - this.size * (this.width/2); }
 Critter.prototype.right = function() { return this.x + this.size * (this.width/2); }
-Critter.prototype.top = function() { return this.y - this.size * (this.height); }
+Critter.prototype.top = function() { return this.y - this.size * (-this.body.y + this.height); }
 
 Critter.prototype.sightRadius = function() {
 	return this.width * 3;
@@ -32,6 +33,11 @@ Critter.prototype.sightRadius = function() {
 Critter.prototype.growPair = function(partClass, x, y) {
 	this.bodyParts.push(new partClass(x, y, this, false));
 	this.bodyParts.push(new partClass(-x, y, this, true));
+}
+
+Critter.prototype.calcBodyDetails = function() {
+	this.legCount = this.bodyParts.filter(function(el) { return el instanceof LegPart; }).length;
+	this.maxSpeed = 3 + (this.legCount);
 }
 
 Critter.prototype.shapeshift = function(critter) {
@@ -45,18 +51,20 @@ Critter.prototype.shapeshift = function(critter) {
 	critter.bodyParts.forEach(function(part) {
 		self.bodyParts.push(part.clone(self));
 	});
+	this.calcBodyDetails();
 }
 
 Critter.prototype.eat = function(berry) {
 	switch (berry.type) {
-		case 'stiffen':
+		case 'legs':
 			this.stiffness = 1;
-			this.growPair(LegPart, this.width * 0.2, -this.height/2);
 			this.body.y -= 5;
+			this.growPair(LegPart, this.width * 0.2 + (this.body.y/3), this.body.y);
 			break;
 		default:
 			// nothing
 	}
+	this.calcBodyDetails();
 	
 	this.size *= 1.1;
 	if (this.size > 1.5) {
@@ -73,9 +81,11 @@ Critter.prototype.eat = function(berry) {
 }
 
 Critter.prototype.accelerate = function(x, y) {
-	var delta = 0.2;
+	var delta = 0.1 * (this.legCount + 2);
 	var decay = delta * 2;
-	var max = 3;
+	var max = this.maxSpeed;
+
+	var vDelta = 0.2;
 	var vMax = 10;
 
 	if (x * this.speed < 0) {
@@ -107,7 +117,7 @@ Critter.prototype.accelerate = function(x, y) {
 
 
 	if (this.y < canvas.height) {
-		this.fallSpeed += delta * 2;
+		this.fallSpeed += vDelta * 2;
 		if (this.fallSpeed > vMax) {
 			this.fallSpeed = vMax;
 		}
@@ -190,9 +200,13 @@ Critter.prototype.update = function() {
 	this.calcAnimParams();
 }
 
+Critter.prototype.animSpeed = function() {
+	return Math.min(3, Math.max(-3, this.speed));
+}
+
 Critter.prototype.calcAnimParams = function() {
 	this.rawAmp = Math.sin((game.tick - this.birthTick) / (4.75 + this.wobbleRate)); 
-	this.fastAmp = Math.sin(2 * (game.tick - this.birthTick) / (4.75 + this.wobbleRate)); 
-	this.wobble = this.size * (this.rawAmp * 2.5 - this.speed); 
+	this.fastAmp = Math.sin(2 * (this.maxSpeed/3) * (game.tick - this.birthTick) / (4.75 + this.wobbleRate)); 
+	this.wobble = this.size * (this.rawAmp * 2.5 - this.animSpeed()); 
 	this.stretch = this.size * this.fallSpeed * 2;
 }

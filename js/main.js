@@ -44,12 +44,12 @@ function setupGameWorld() {
 	}
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.003) {
-			game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'stiffen'));
+			game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
 			i += 30;
 		}
 	}
 
-	game.player.eat(new Berry(1, 2, 3, null, 'stiffen'));
+	game.player.eat(new Berry(1, 2, 3, null, 'legs'));
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically

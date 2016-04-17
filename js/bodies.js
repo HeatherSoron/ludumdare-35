@@ -36,7 +36,7 @@ Class.makeClass(BodyPart, function SlimeBody(x, y, owner, flip) {
 
 SlimeBody.prototype.definePath = function() {
 	var halfWidth = this.owner.size * this.owner.width/2;
-	var top = this.owner.top() + (this.owner.size * this.y);
+	var top = this.owner.top();
 	var bottom = this.owner.y + (this.owner.size * this.y);
 	var hMid = this.owner.x + (this.owner.size * this.x);
 
@@ -72,21 +72,21 @@ Class.makeClass(BodyPart, function LegPart(x, y, owner, flip) {
 
 LegPart.prototype.definePath = function() {
 	var halfWidth = this.owner.size * this.owner.width/2;
-	var top = this.owner.top();
+	var top = this.owner.top() + this.y;
 	var bottom = this.owner.y;
-	var vAnchor = bottom + (this.owner.size * this.y);
+	var vAnchor = bottom + this.owner.size * (this.owner.body.y + this.y);
 	var hAnchor = this.owner.x + (this.owner.size * this.x);
 
 	var dir = this.flip ? -1 : 1;
 
-	var span = this.owner.x - (dir * this.y * this.owner.size * 3);
-	var offset = -this.y / 2;
+	var span = this.owner.x - dir * (-30 + this.y * this.owner.size * 1);
+	var offset = 5 - (this.y/5);
 
 	var wobble = this.owner.wobble;
 	var stretch = this.owner.stretch;
 
-	var footHeight = 4 * this.owner.fastAmp * this.owner.speed;
-	var footDist = -1 * this.owner.fastAmp * this.owner.speed;
+	var footHeight = 4 * this.owner.fastAmp * this.owner.animSpeed();
+	var footDist = -1 * this.owner.fastAmp * this.owner.animSpeed();
 
 	var side = halfWidth + this.owner.stiffness * 100 * this.owner.size;
 
