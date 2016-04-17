@@ -41,6 +41,7 @@ SlimeBody.prototype.definePath = function() {
 	var hMid = this.owner.x + (this.owner.size * this.x);
 
 	var wobble = this.owner.wobble;
+	var smallWobble = wobble/2;
 	var stretch = this.owner.stretch;
 	
 	ctx.moveTo(hMid - halfWidth, bottom);
@@ -50,7 +51,7 @@ SlimeBody.prototype.definePath = function() {
 	} else {
 		ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
 	}
-	ctx.bezierCurveTo(hMid + halfWidth, this.owner.y, hMid - halfWidth, this.owner.y, hMid - halfWidth, bottom);
+	ctx.bezierCurveTo(hMid + smallWobble + halfWidth, this.owner.y, hMid + smallWobble - halfWidth, this.owner.y, hMid - halfWidth, bottom);
 }
 
 
