@@ -39,14 +39,32 @@ Player.prototype.update = function() {
 			var grabbed = touching.filter(function(el) { return el.grabbedBy == self; }); 
 
 			if (grabbed.length) {
-				var critters = touching.filter(function(el) { return el instanceof Critter; });
-				if (critters.length) {
-					critters[0].eat(grabbed[0]);
+				if (grabbed[0] instanceof SuperBerry) {
+					var berries = touching.filter(function(el) { return el instanceof Berry; });
+					if (berries.length) {
+						var berry = berries[0];
+						grabbed[0].type = berry.type;
+						grabbed[0].definePath = berry.definePath;
+						grabbed[0].bushSize = berry.size * 4;
+						berry.kill();
+					} else {
+						grabbed[0].plant();
+					}
+				} else {
+					var critters = touching.filter(function(el) { return el instanceof Critter; });
+					if (critters.length) {
+						critters[0].eat(grabbed[0]);
+					}
 				}
 			} else {
-				var berries = touching.filter(function(el) { return el instanceof Berry; });
-				if (berries.length) {
-					berries[0].grabbedBy = this;
+				var supers = touching.filter(function(el) { return el instanceof SuperBerry; });
+				if (supers.length) {
+					supers[0].grabbedBy = this;
+				} else {
+					var berries = touching.filter(function(el) { return el instanceof Berry; });
+					if (berries.length) {
+						berries[0].grabbedBy = this;
+					}
 				}
 			}
 		}

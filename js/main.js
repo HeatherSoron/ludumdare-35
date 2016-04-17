@@ -49,6 +49,10 @@ function setupGameWorld() {
 		ctx.lineTo(left, bottom);
 	}
 
+	function superBush() {
+		ctx.arc(this.x, this.y, this.size + 0.5 * Math.sin(game.tick / 7), 0, Math.PI * 2);
+	}
+
 	var normalCount = 0;
 	var legCount = 0;
 	var platformCount = 0;
@@ -71,6 +75,9 @@ function setupGameWorld() {
 			}
 			i += 30;
 		}
+	}
+	for (var i = -1; i <= 1; ++i) {
+		game.mobs.push(new Bush(i * canvas.width + game.player.x, canvas.height - 150, 20, superBush, 'super'));
 	}
 
 	//game.player.eat(new Berry(1, 2, 3, null, 'wings'));
