@@ -121,6 +121,8 @@ Critter.prototype.eat = function(berry) {
 	this.setHealth(100);
 
 	berry.kill();
+
+	recalcCritterCount();
 }
 
 Critter.prototype.accelerate = function(x, y) {

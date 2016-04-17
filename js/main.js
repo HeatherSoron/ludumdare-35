@@ -23,6 +23,8 @@ function setupGameWorld() {
 		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
+	recalcCritterCount();
+
 	function diamondBush() {
 		var top = this.top();
 		var right = this.right();
@@ -87,6 +89,10 @@ function setupGameWorld() {
 	}
 }
 
+function recalcCritterCount() {
+	game.critterCount = game.mobs.filter(function(el) { return (el instanceof Critter) && !(el.dead); }).length;
+}
+
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
 function runGame() {
 	game.tick += 1;
@@ -123,6 +129,9 @@ function renderGame() {
 	});
 
 	ctx.restore();
+	
+	ctx.font = '18px Arial';
+	ctx.fillText('Critters: ' + game.critterCount, 10, 25);
 }
 
 function clearScreen() {
