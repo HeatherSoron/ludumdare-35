@@ -119,7 +119,12 @@ Critter.prototype.definePath = function() {
 	
 	ctx.moveTo(hMid, bottom);
 	ctx.lineTo(hMid - halfWidth, bottom);
-	ctx.bezierCurveTo(hMid + wobble - side, top - stretch, hMid + wobble + side, top - stretch, hMid + halfWidth, bottom);
+	if (this.stiffness) {
+		ctx.lineTo(hMid + wobble, top - stretch);
+		ctx.lineTo(hMid + halfWidth, bottom);
+	} else {
+		ctx.bezierCurveTo(hMid + wobble - side, top - stretch, hMid + wobble + side, top - stretch, hMid + halfWidth, bottom);
+	}
 	ctx.lineTo(hMid, bottom);
 }
 
