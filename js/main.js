@@ -67,7 +67,7 @@ function setupGameWorld() {
 		}
 	}
 
-	//game.player.eat(new Berry(1, 2, 3, null, 'legs'));
+	//game.player.eat(new Berry(1, 2, 3, null, 'wings'));
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically

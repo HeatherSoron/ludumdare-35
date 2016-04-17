@@ -12,7 +12,7 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 
 	this.g = 230;
 	this.b = 255;
-	this.a = 0.8;
+	this.a = 1;
 
 	this.z = 1;
 
@@ -65,6 +65,10 @@ Critter.prototype.eat = function(berry) {
 		case 'platform':
 			this.height += 5;
 			this.body.type = 'platform';
+			break;
+		case 'wings':
+			this.growPair(WingPart, 5, -12);
+			this.body.y -= 3;
 		default:
 			// nothing
 	}

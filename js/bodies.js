@@ -104,3 +104,48 @@ LegPart.prototype.definePath = function() {
 	ctx.quadraticCurveTo(span + wobble, top - stretch, span + (footDist), bottom + (dir * footHeight));
 	ctx.quadraticCurveTo(span + wobble - (dir * offset), top - stretch + offset, hAnchor + (dir * offset), vAnchor + offset); 
 }
+
+
+
+
+/* BODY PART: Wing */
+
+Class.makeClass(BodyPart, function WingPart(x, y, owner, flip) {
+	this.init();
+
+	this.x = x;
+	this.y = y;
+	this.flip = flip;
+
+	this.setOwner(owner);
+});
+
+WingPart.prototype.definePath = function() {
+	var halfWidth = this.owner.size * this.owner.width/2;
+	var top = this.owner.top();
+	var bottom = this.owner.y;
+	var vAnchor = bottom + this.owner.size * (this.owner.body.y + this.y);
+	var hAnchor = this.owner.x + (this.owner.size * this.x);
+
+	var vMid = top + (this.owner.height/2 * this.owner.size);
+
+	top += 10;
+
+	var dir = this.flip ? -1 : 1;
+
+	var span = this.owner.x - dir * (-40 * this.owner.size);
+	var offset = 5 - (this.y/5);
+
+	var wobble = this.owner.wobble;
+	var stretch = this.owner.stretch;
+
+	var footHeight = 4 * this.owner.fastAmp * this.owner.animSpeed();
+	var footDist = -1 * this.owner.fastAmp * this.owner.animSpeed();
+
+	var flap = Math.abs(15 * (this.owner.rawAmp) * this.owner.animSpeed());
+
+	ctx.moveTo(hAnchor, vAnchor);
+	ctx.quadraticCurveTo(span + wobble, bottom, span, top - offset + flap);
+	ctx.lineTo(span + (dir * offset * 2), top + flap);
+	ctx.quadraticCurveTo(span + wobble, bottom, hAnchor, vAnchor);
+}
