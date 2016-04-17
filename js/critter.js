@@ -232,7 +232,7 @@ Critter.prototype.navToTarget = function() {
 		var self = this;
 		var prey = game.mobs.filter(function(el) { return el instanceof Critter && el != self && el.health < 50 && el.fitness() < self.fitness(); });
 		var nearest = null;
-		var maxDist = this.sightRadius() * 2;
+		var maxDist = this.sightRadius() * 0.5;
 		prey.forEach(function(critter) {
 			if (critter != self) {
 				var dist = critter.distTo(self);
