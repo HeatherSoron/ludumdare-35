@@ -59,9 +59,9 @@ SlimeBody.prototype.definePath = function() {
 		var shallowWidth = halfWidth / 2;
 		var vMid = bottom - (this.owner.size * this.owner.height/2);
 
-		ctx.quadraticCurveTo(left + shallowWidth, vMid, left, top);
+		ctx.quadraticCurveTo(left + shallowWidth + smallWobble, vMid, left, top);
 		ctx.lineTo(right, top);
-		ctx.quadraticCurveTo(right - shallowWidth, vMid, right, bottom);
+		ctx.quadraticCurveTo(right - shallowWidth - smallWobble, vMid, right, bottom);
 		ctx.lineTo(left, bottom);
 	} else {
 		if (this.owner.stiffness) {
@@ -114,7 +114,7 @@ LegPart.prototype.definePath = function() {
 
 
 
-/* BODY PART: Wing */
+/* BODY PART: Wing (unused) */
 
 Class.makeClass(BodyPart, function WingPart(x, y, owner, flip) {
 	this.init();
