@@ -49,25 +49,35 @@ function setupGameWorld() {
 		ctx.lineTo(left, bottom);
 	}
 
+	var normalCount = 0;
+	var legCount = 0;
+	var platformCount = 0;
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.01) {
 			game.mobs.push(new Bush(i, canvas.height - 10, 20));
 			// don't put bushes too close together
 			i += 30;
+			normalCount++;
 		}
 	}
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.003) {
 			if (Math.random() < 0.5) {
 				game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
+				legCount++;
 			} else {
 				game.mobs.push(new Bush(i, canvas.height - 70, 15, platformBush, 'platform'));
+				platformCount++;
 			}
 			i += 30;
 		}
 	}
 
 	//game.player.eat(new Berry(1, 2, 3, null, 'wings'));
+
+	if (normalCount < 5 || legCount < 3 || platformCount < 2) {
+		setupGameWorld();
+	}
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
