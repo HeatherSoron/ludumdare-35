@@ -37,17 +37,21 @@ Critter.prototype.growPair = function(partClass, x, y) {
 Critter.prototype.calcBodyDetails = function() {
 	this.legCount = this.bodyParts.filter(function(el) { return el instanceof LegPart; }).length;
 	this.maxSpeed = 3 + (this.legCount);
+	this.isPlatform = this.body.type == 'platform';
 }
 
 Critter.prototype.shapeshift = function(critter) {
 	this.width = critter.width;
 	this.height = critter.height;
 	this.body = critter.body.clone(this);
+	this.body.type = critter.body.type;
 	this.bodyParts = [];
 
 	var self = this;
 	critter.bodyParts.forEach(function(part) {
-		self.bodyParts.push(part.clone(self));
+		var clone = part.clone(self);
+		clone.type = part.type;
+		self.bodyParts.push(clone);
 	});
 	this.calcBodyDetails();
 }
@@ -58,6 +62,9 @@ Critter.prototype.eat = function(berry) {
 			this.body.y -= 5;
 			this.growPair(LegPart, this.width * 0.2 + (this.body.y/3), this.body.y);
 			break;
+		case 'platform':
+			this.height += 5;
+			this.body.type = 'platform';
 		default:
 			// nothing
 	}
@@ -113,7 +120,7 @@ Critter.prototype.accelerate = function(x, y) {
 	}
 
 
-	if (this.y < canvas.height) {
+	if (!this.isGrounded()) {
 		this.fallSpeed += vDelta * 2;
 		if (this.fallSpeed > vMax) {
 			this.fallSpeed = vMax;
@@ -122,6 +129,22 @@ Critter.prototype.accelerate = function(x, y) {
 		this.fallSpeed = y;
 	}
 };
+
+Critter.prototype.isGrounded = function() {
+	if (this.y >= canvas.height) {
+		return true;
+	}
+	var platforms = game.mobs.filter(function(el) { return el.isPlatform; });
+	for (var i = 0; i < platforms.length; ++i) {
+		var p = platforms[i];
+		if (Math.abs(this.x - p.x) < (this.width/2 * this.size + p.width/2 * p.size)) {
+			if (this.y >= p.top()) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 Critter.prototype.move = function() {
 	this.x += this.speed;

@@ -35,6 +35,20 @@ function setupGameWorld() {
 		ctx.lineTo(left, this.y);
 		ctx.lineTo(this.x, top);
 	}
+
+	function platformBush() {
+		var top = this.top();
+		var right = this.right();
+		var left = this.left();
+		var bottom = this.bottom();
+
+		ctx.moveTo(left, bottom);
+		ctx.quadraticCurveTo(this.x, this.y, left, top);
+		ctx.lineTo(right, top);
+		ctx.quadraticCurveTo(this.x, this.y, right, bottom);
+		ctx.lineTo(left, bottom);
+	}
+
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.01) {
 			game.mobs.push(new Bush(i, canvas.height - 10, 20));
@@ -44,12 +58,16 @@ function setupGameWorld() {
 	}
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.003) {
-			game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
+			if (Math.random() < 0.5) {
+				game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
+			} else {
+				game.mobs.push(new Bush(i, canvas.height - 70, 15, platformBush, 'platform'));
+			}
 			i += 30;
 		}
 	}
 
-	game.player.eat(new Berry(1, 2, 3, null, 'legs'));
+	//game.player.eat(new Berry(1, 2, 3, null, 'legs'));
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically

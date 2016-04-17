@@ -17,6 +17,7 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 
 	this.body = new SlimeBody(0, 0, this);
 	this.bodyParts = [];
+	this.calcBodyDetails();
 });
 
 Player.prototype.findTouching = function() {
@@ -60,7 +61,7 @@ Player.prototype.update = function() {
 		// treat this as a press-then-release key (probably breaking abstraction, but, eh. game jam)
 		keysHeld.t = false;
 	}
-	if (keysHeld.space && this.y >= canvas.height) {
+	if (keysHeld.space && this.isGrounded()) {
 		console.log('jumping');
 		y = -8;
 		keysHeld.space = false;

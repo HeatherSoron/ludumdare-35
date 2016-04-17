@@ -40,18 +40,32 @@ SlimeBody.prototype.definePath = function() {
 	var bottom = this.owner.y + (this.owner.size * this.y);
 	var hMid = this.owner.x + (this.owner.size * this.x);
 
+	var left = hMid - halfWidth;
+	var right = hMid + halfWidth;
+
 	var wobble = this.owner.wobble;
 	var smallWobble = wobble/2;
 	var stretch = this.owner.stretch;
 	
-	ctx.moveTo(hMid - halfWidth, bottom);
-	if (this.owner.stiffness) {
-		ctx.lineTo(hMid + wobble, top - stretch);
-		ctx.lineTo(hMid + halfWidth, bottom);
+	ctx.moveTo(left, bottom);
+
+	if (this.type == 'platform') {
+		var shallowWidth = halfWidth / 2;
+		var vMid = bottom - (this.owner.size * this.owner.height/2);
+
+		ctx.quadraticCurveTo(left + shallowWidth, vMid, left, top);
+		ctx.lineTo(right, top);
+		ctx.quadraticCurveTo(right - shallowWidth, vMid, right, bottom);
+		ctx.lineTo(left, bottom);
 	} else {
-		ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
+		if (this.owner.stiffness) {
+			ctx.lineTo(hMid + wobble, top - stretch);
+			ctx.lineTo(hMid + halfWidth, bottom);
+		} else {
+			ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
+		}
+		ctx.bezierCurveTo(hMid + smallWobble + halfWidth, this.owner.y, hMid + smallWobble - halfWidth, this.owner.y, hMid - halfWidth, bottom);
 	}
-	ctx.bezierCurveTo(hMid + smallWobble + halfWidth, this.owner.y, hMid + smallWobble - halfWidth, this.owner.y, hMid - halfWidth, bottom);
 }
 
 
