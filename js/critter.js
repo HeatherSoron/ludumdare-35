@@ -17,7 +17,7 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 
 	this.z = 1;
 
-	this.body = new SlimeBody(x, y, this);
+	this.body = new SlimeBody(0, 0, this);
 	this.bodyParts = [];
 });
 
@@ -52,6 +52,7 @@ Critter.prototype.eat = function(berry) {
 		case 'stiffen':
 			this.stiffness = 1;
 			this.growPair(LegPart, this.width * 0.2, -this.height/2);
+			this.body.y -= 5;
 			break;
 		default:
 			// nothing
@@ -166,8 +167,16 @@ Critter.prototype.update = function() {
 	var xDelta = this.y == canvas.height ? this.navToTarget() : 0;
 	var yDelta = 0;
 
-
 	this.accelerate(xDelta, yDelta);
 
 	this.move();
+
+	this.calcAnimParams();
+}
+
+Critter.prototype.calcAnimParams = function() {
+	this.rawAmp = Math.sin((game.tick - this.birthTick) / (4.75 + this.wobbleRate)); 
+	this.fastAmp = Math.sin(2 * (game.tick - this.birthTick) / (4.75 + this.wobbleRate)); 
+	this.wobble = this.size * (this.rawAmp * 2.5 - this.speed); 
+	this.stretch = this.size * this.fallSpeed * 2;
 }

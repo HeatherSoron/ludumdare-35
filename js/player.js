@@ -16,7 +16,7 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	
 	this.z = 2;
 
-	this.body = new SlimeBody(x, y, this);
+	this.body = new SlimeBody(0, 0, this);
 	this.bodyParts = [];
 });
 
@@ -77,4 +77,6 @@ Player.prototype.update = function() {
 	this.accelerate(x, y);
 
 	this.move();
+
+	this.calcAnimParams();
 }
