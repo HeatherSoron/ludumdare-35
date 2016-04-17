@@ -75,11 +75,28 @@ Critter.prototype.eat = function(berry) {
 	switch (berry.type) {
 		case 'legs':
 			this.body.y -= 5;
-			this.growPair(LegPart, this.width * 0.2 + (this.body.y/3), this.body.y);
+			if (this.legCount < 6) {
+				this.growPair(LegPart, this.width * 0.2 + (this.body.y/3), this.body.y);
+			}
 			break;
 		case 'platform':
-			this.height += 5;
+			this.height += 7;
 			this.body.type = 'platform';
+			if (this.body.y < 0) {
+				this.body.y += 5;
+			}
+			if (this.legCount > 2 || (this.body.y == 0 && this.legCount > 0)) {
+				var removeCount = 2;
+				for (var i = this.bodyParts.length - 1; i >= 0; --i) {
+					if (this.bodyParts[i] instanceof LegPart) {
+						this.bodyParts.splice(i, 1);
+						removeCount -= 1;
+						if (removeCount <= 0) {
+							break;
+						}
+					}
+				}
+			}
 			break;
 		case 'wings':
 			this.growPair(WingPart, 5, -12);
