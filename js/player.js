@@ -7,6 +7,7 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.height = height;
 
 	this.size = 1;
+	this.stiffness = 0;
 
 	this.r = 220;
 	this.b = 220;
@@ -20,11 +21,6 @@ Player.prototype.findTouching = function() {
 	return game.mobs.filter(function(el) {
 		return el.getBounds().intersects(bb);
 	});
-}
-
-Player.prototype.shapeshift = function(critter) {
-	this.width = critter.width;
-	this.height = critter.height;
 }
 
 Player.prototype.update = function() {
@@ -62,7 +58,7 @@ Player.prototype.update = function() {
 	}
 	if (keysHeld.space && this.y >= canvas.height) {
 		console.log('jumping');
-		y = -7;
+		y = -(4 * (this.stiffness + 2));
 		keysHeld.space = false;
 	}
 

@@ -7,6 +7,7 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.height = height;
 
 	this.size = 1;
+	this.stiffness = 0;
 
 	this.g = 230;
 	this.b = 255;
@@ -23,7 +24,21 @@ Critter.prototype.sightRadius = function() {
 	return this.width * 3;
 }
 
+Critter.prototype.shapeshift = function(critter) {
+	this.width = critter.width;
+	this.height = critter.height;
+	this.stiffness = critter.stiffness;
+}
+
 Critter.prototype.eat = function(berry) {
+	switch (berry.type) {
+		case 'stiffen':
+			this.stiffness = 1;
+			break;
+		default:
+			// nothing
+	}
+	
 	this.size *= 1.1;
 	if (this.size > 1.5) {
 		var newSize = this.size / 2;
@@ -31,6 +46,7 @@ Critter.prototype.eat = function(berry) {
 		var side = Math.random() <= 0.5 ? -1 : 1;
 		var baby = new Critter(this.x + this.width * 1.3 * side, this.y, this.width, this.height);
 		baby.size = newSize;
+		baby.shapeshift(this);
 		game.mobs.push(baby);
 	}
 
@@ -90,23 +106,21 @@ Critter.prototype.move = function() {
 	}
 }
 
-Critter.prototype.render = function() {
+Critter.prototype.definePath = function() {
 	var halfWidth = this.size * this.width/2;
 	var top = this.top();
 	var bottom = this.y;
 	var hMid = this.x;
 
-	var wobble = Math.sin((game.tick - this.birthTick) / 5) * 2.5 - this.speed; 
-	var stretch = this.fallSpeed * 2;
+	var wobble = this.size * (Math.sin((game.tick - this.birthTick) / 5) * 2.5 - this.speed); 
+	var stretch = this.size * this.fallSpeed * 2;
 
-	ctx.beginPath();
+	var side = halfWidth + this.stiffness * 100 * this.size;
 	
 	ctx.moveTo(hMid, bottom);
 	ctx.lineTo(hMid - halfWidth, bottom);
-	ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
+	ctx.bezierCurveTo(hMid + wobble - side, top - stretch, hMid + wobble + side, top - stretch, hMid + halfWidth, bottom);
 	ctx.lineTo(hMid, bottom);
-
-	this.drawPath();
 }
 
 Critter.prototype.navToTarget = function() {

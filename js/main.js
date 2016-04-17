@@ -23,11 +23,29 @@ function setupGameWorld() {
 		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 	}
 
+	function diamondBush() {
+		var top = this.top();
+		var right = this.right();
+		var left = this.left();
+		var bottom = this.bottom();
+
+		ctx.moveTo(this.x, top);
+		ctx.lineTo(right, this.y);
+		ctx.lineTo(this.x, bottom);
+		ctx.lineTo(left, this.y);
+		ctx.lineTo(this.x, top);
+	}
 	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
 		if (Math.random() < 0.01) {
 			game.mobs.push(new Bush(i, canvas.height - 10, 20));
 			// don't put bushes too close together
-			i += 40;
+			i += 30;
+		}
+	}
+	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
+		if (Math.random() < 0.003) {
+			game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'stiffen'));
+			i += 30;
 		}
 	}
 }

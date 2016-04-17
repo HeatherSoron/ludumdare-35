@@ -1,9 +1,13 @@
-Class.makeClass(Mob, function Bush(x, y, size) {
+Class.makeClass(Mob, function Bush(x, y, size, pathFunc, type) {
 	this.init();
+	if (pathFunc) {
+		this.definePath = pathFunc;
+	}
 
 	this.x = x;
 	this.y = y;
 	this.size = size;
+	this.type = type;
 
 	this.g = 120;
 });
@@ -14,9 +18,13 @@ Bush.prototype.top = function() { return this.y - this.size; }
 Bush.prototype.bottom = function() { return this.y + this.size; }
 
 
+Bush.prototype.definePath = function() {
+	ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+}
+
 Bush.prototype.render = function() {
 	ctx.beginPath();
-	ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+	this.definePath();
 	this.drawPath();
 }
 
@@ -27,7 +35,8 @@ Bush.prototype.update = function() {
 		}
 	} else {
 		if (Math.random() < 0.001) {
-			var berry = new Berry(this.x, this.y, 5);
+			var pathFunc = this.definePath == Bush.prototype.definePath ? null : this.definePath;
+			var berry = new Berry(this.x, this.y, this.size / 4, pathFunc, this.type);
 			game.mobs.push(berry);
 			this.spawn = berry;
 		}

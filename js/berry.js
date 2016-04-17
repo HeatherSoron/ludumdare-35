@@ -1,9 +1,13 @@
-Class.makeClass(Mob, function Berry(x, y, size) {
+Class.makeClass(Mob, function Berry(x, y, size, pathFunc, type) {
 	this.init();
+	if (pathFunc) {
+		this.definePath = pathFunc;
+	}
 
 	this.x = x;
 	this.y = y;
 	this.size = size;
+	this.type = type;
 
 	this.r = 230;
 
@@ -16,10 +20,8 @@ Berry.prototype.top = function() { return this.y - this.size; }
 Berry.prototype.bottom = function() { return this.y + this.size; }
 
 
-Berry.prototype.render = function() {
-	ctx.beginPath();
+Berry.prototype.definePath = function() {
 	ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-	this.drawPath();
 }
 
 Berry.prototype.update = function() {

@@ -45,7 +45,13 @@ Mob.prototype.getColor = function() {
 	return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
 }
 
+Mob.prototype.definePath = function() {
+}
+
 Mob.prototype.render = function() {
+	ctx.beginPath();
+	this.definePath();
+	this.drawPath();
 }
 
 Mob.prototype.drawPath = function() {
