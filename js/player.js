@@ -7,7 +7,6 @@ Class.makeClass(Critter, function Player(x, y, width, height) {
 	this.height = height;
 
 	this.size = 1;
-	this.stiffness = 0;
 
 	this.wobbleRate = 1;
 
@@ -63,7 +62,7 @@ Player.prototype.update = function() {
 	}
 	if (keysHeld.space && this.y >= canvas.height) {
 		console.log('jumping');
-		y = -(4 * (this.stiffness + 2));
+		y = -8;
 		keysHeld.space = false;
 	}
 

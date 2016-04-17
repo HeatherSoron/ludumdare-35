@@ -7,7 +7,6 @@ Class.makeClass(Mob, function Critter(x, y, width, height) {
 	this.height = height;
 
 	this.size = 1;
-	this.stiffness = 0;
 
 	this.wobbleRate = (Math.random() - 0.5) / 2;
 
@@ -43,7 +42,6 @@ Critter.prototype.calcBodyDetails = function() {
 Critter.prototype.shapeshift = function(critter) {
 	this.width = critter.width;
 	this.height = critter.height;
-	this.stiffness = critter.stiffness;
 	this.body = critter.body.clone(this);
 	this.bodyParts = [];
 
@@ -57,7 +55,6 @@ Critter.prototype.shapeshift = function(critter) {
 Critter.prototype.eat = function(berry) {
 	switch (berry.type) {
 		case 'legs':
-			this.stiffness = 1;
 			this.body.y -= 5;
 			this.growPair(LegPart, this.width * 0.2 + (this.body.y/3), this.body.y);
 			break;

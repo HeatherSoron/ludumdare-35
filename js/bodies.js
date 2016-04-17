@@ -42,18 +42,15 @@ SlimeBody.prototype.definePath = function() {
 
 	var wobble = this.owner.wobble;
 	var stretch = this.owner.stretch;
-
-	var side = halfWidth + this.owner.stiffness * 100 * this.owner.size;
 	
-	ctx.moveTo(hMid, bottom);
-	ctx.lineTo(hMid - halfWidth, bottom);
+	ctx.moveTo(hMid - halfWidth, bottom);
 	if (this.owner.stiffness) {
 		ctx.lineTo(hMid + wobble, top - stretch);
 		ctx.lineTo(hMid + halfWidth, bottom);
 	} else {
-		ctx.bezierCurveTo(hMid + wobble - side, top - stretch, hMid + wobble + side, top - stretch, hMid + halfWidth, bottom);
+		ctx.bezierCurveTo(hMid + wobble - halfWidth, top - stretch, hMid + wobble + halfWidth, top - stretch, hMid + halfWidth, bottom);
 	}
-	ctx.lineTo(hMid, bottom);
+	ctx.bezierCurveTo(hMid + halfWidth, this.owner.y, hMid - halfWidth, this.owner.y, hMid - halfWidth, bottom);
 }
 
 
@@ -87,8 +84,6 @@ LegPart.prototype.definePath = function() {
 
 	var footHeight = 4 * this.owner.fastAmp * this.owner.animSpeed();
 	var footDist = -1 * this.owner.fastAmp * this.owner.animSpeed();
-
-	var side = halfWidth + this.owner.stiffness * 100 * this.owner.size;
 
 	ctx.moveTo(hAnchor, vAnchor);
 	ctx.quadraticCurveTo(span + wobble, top - stretch, span + (footDist), bottom + (dir * footHeight));
