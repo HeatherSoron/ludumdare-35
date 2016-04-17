@@ -161,7 +161,7 @@ Critter.prototype.accelerate = function(x, y) {
 	}
 
 
-	if (!this.isGrounded()) {
+	if (!this.isGrounded() || this.fallSpeed < 0) {
 		this.fallSpeed += vDelta * 2;
 		if (this.fallSpeed > vMax) {
 			this.fallSpeed = vMax;
