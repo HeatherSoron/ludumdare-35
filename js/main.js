@@ -16,10 +16,10 @@ function setupGameWorld() {
 	var y = 300;
 	
 	game.tick = 0;
+	game.mobs = [];
 
 	if (game.mode == 'play') {
 		game.player = new Player(left, y, width, height);
-		game.mobs = [];
 		game.mobs.push(game.player);
 
 		for (var i = 0; i < 4; ++i) {
@@ -91,7 +91,6 @@ function setupGameWorld() {
 			setupGameWorld();
 		}
 	} else if (game.mode == 'title') {
-		game.mobs = [];
 		game.mobs.push(new Critter(canvas.width/2, y, width, height));
 		game.mobs.push(new Critter(100, y, width, height));
 		game.mobs.push(new Critter(500, y, width, height));
@@ -122,6 +121,16 @@ function updateGame() {
 		if (keysHeld.enter || keysHeld.space) {
 			game.mode = 'play';
 			setupGameWorld();
+		} else if (keysHeld.slash || keysHeld.h) {
+			game.mode = 'help';
+			setupGameWorld();
+		}
+	} else if (game.mode == 'help') {
+		if (keysHeld.enter || keysHeld.space) {
+			game.mode = 'title';
+			setupGameWorld();
+			keysHeld.enter = false;
+			keysHeld.space = false;
 		}
 	}
 	game.mobs.forEach(function(mob) {
@@ -159,7 +168,7 @@ function renderGame() {
 		ctx.textAlign = 'left';
 		ctx.font = '18px Arial';
 		ctx.fillText('Critters: ' + game.critterCount, 10, 25);
-	} if (game.mode == 'title') {
+	} else if (game.mode == 'title') {
 		ctx.textAlign = 'center';
 		var middle = canvas.width/2;
 
@@ -170,6 +179,46 @@ function renderGame() {
 
 		ctx.font = '14px Arial';
 		ctx.fillText('Press ENTER to start', middle, canvas.height/2);
+		ctx.fillText("Press '?' or 'H' for instructions", middle, canvas.height/2 + 30);
+	} else if (game.mode = 'help') {
+		var middle = canvas.width/2;
+
+		ctx.textAlign = 'center';
+		ctx.font = '16px Arial';
+		ctx.fillText('What a wonderful menagerie of critters! You can give them legs with the', middle, 30);
+		ctx.fillText('diamond berries, or turn them into platforms with the hourglass berries.', middle, 50);
+
+		ctx.fillText('Super berries, which are green instead of red, can grow new bushes.', middle, 80);
+		ctx.fillText("Combine a super berry that you're holding with a berry you're touching,", middle, 100);
+		ctx.fillText("and you can then plant it to make that type of berry bush.", middle, 120);
+
+		ctx.fillText("What kind of critters will you make? See what fun combinations exist!", middle, 150);
+		ctx.fillText("Just keep them well fed - when they get too hungry, well...", middle, 170);
+
+		var ctrl = [
+			['Move player', 'LEFT / RIGHT arrow'],
+			['Jump', 'SPACE BAR'],
+			['Transform into critter', 'T'],
+			['Grab / Use berry', 'G'],
+			['Drop berry', 'D'],
+			['Return to title screen', 'ENTER'],
+		];
+		
+		ctx.font = '14px Arial';
+		ctrl.forEach(function(line, i) {
+			ctx.strokeStyle = 'black';
+			ctx.textAlign = 'right';
+			ctx.fillText(line[0], middle - 20, i * 30 + 230);
+			ctx.textAlign = 'left';
+			ctx.fillText(line[1], middle + 20, i * 30 + 230);
+			ctx.beginPath();
+
+			ctx.strokeStyle = 'rgb(100,100,100)';
+			ctx.moveTo(middle - 70, i * 30 + 240);
+			ctx.lineTo(middle + 70, i * 30 + 240);
+			ctx.stroke();
+		});
+		ctx.strokeStyle = 'black';
 	}
 }
 

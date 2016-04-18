@@ -8,6 +8,8 @@ var keyMap = {
 
 	13: "enter",
 
+	191: "slash",
+
 	65: "a",
 	66: "b",
 	67: "c",
