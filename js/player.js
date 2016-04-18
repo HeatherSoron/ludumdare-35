@@ -71,6 +71,14 @@ Player.prototype.update = function() {
 		// treat this as a press-then-release key (probably breaking abstraction, but, eh. game jam)
 		keysHeld.g = false;
 	}
+	if (keysHeld.d) {
+		var self = this;
+		var grabbed = game.mobs.filter(function(el) { return el.grabbedBy == self; }); 
+		if (grabbed.length) {
+			grabbed[0].grabbedBy = null;
+		}
+		keysHeld.d = false;
+	}
 	if (keysHeld.t) {
 		var critters = this.findTouching().filter(function(el) { return el instanceof Critter; });
 		if (critters.length) {
