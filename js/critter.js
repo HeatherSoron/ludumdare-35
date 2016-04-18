@@ -284,7 +284,7 @@ Critter.prototype.update = function() {
 	var xDelta = this.y == canvas.height ? this.navToTarget() : 0;
 	var yDelta = 0;
 
-	if (this.lastEat + 100 < game.tick && Math.random() < 0.1) {
+	if (this.lastEat + 100 < game.tick && game.mode == 'play' && Math.random() < 0.1) {
 		this.setHealth(this.health - 5);
 	}
 

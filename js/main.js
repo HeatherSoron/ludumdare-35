@@ -3,7 +3,9 @@ var canvas;
 var ctx;
 
 // can be used to store game-specific data
-var game = {};
+var game = {
+	mode: 'title',
+};
 
 function setupGameWorld() {
 	// put game-specific initialization in here
@@ -11,81 +13,96 @@ function setupGameWorld() {
 	var width = 40;
 	var height = 25;
 	var left = 100;
-	var y = 100;
+	var y = 300;
 	
 	game.tick = 0;
 
-	game.player = new Player(left, y, width, height);
-	game.mobs = [];
-	game.mobs.push(game.player);
+	if (game.mode == 'play') {
+		game.player = new Player(left, y, width, height);
+		game.mobs = [];
+		game.mobs.push(game.player);
 
-	for (var i = 0; i < 4; ++i) {
-		game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
-	}
-
-	recalcCritterCount();
-
-	function diamondBush() {
-		var top = this.top();
-		var right = this.right();
-		var left = this.left();
-		var bottom = this.bottom();
-
-		ctx.moveTo(this.x, top);
-		ctx.lineTo(right, this.y);
-		ctx.lineTo(this.x, bottom);
-		ctx.lineTo(left, this.y);
-		ctx.lineTo(this.x, top);
-	}
-
-	function platformBush() {
-		var top = this.top();
-		var right = this.right();
-		var left = this.left();
-		var bottom = this.bottom();
-
-		ctx.moveTo(left, bottom);
-		ctx.quadraticCurveTo(this.x, this.y, left, top);
-		ctx.lineTo(right, top);
-		ctx.quadraticCurveTo(this.x, this.y, right, bottom);
-		ctx.lineTo(left, bottom);
-	}
-
-	function superBush() {
-		ctx.arc(this.x, this.y, this.size + 0.5 * Math.sin(game.tick / 7), 0, Math.PI * 2);
-	}
-
-	var normalCount = 0;
-	var legCount = 0;
-	var platformCount = 0;
-	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
-		if (Math.random() < 0.01) {
-			game.mobs.push(new Bush(i, canvas.height - 10, 20));
-			// don't put bushes too close together
-			i += 30;
-			normalCount++;
+		for (var i = 0; i < 4; ++i) {
+			game.mobs.push(new Critter(left * (i + 0.5), y, width, height));
 		}
-	}
-	for (var i = -canvas.width; i < canvas.width * 2; ++i) {
-		if (Math.random() < 0.003) {
-			if (Math.random() < 0.5) {
-				game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
-				legCount++;
-			} else {
-				game.mobs.push(new Bush(i, canvas.height - 70, 15, platformBush, 'platform'));
-				platformCount++;
+
+		recalcCritterCount();
+
+		function diamondBush() {
+			var top = this.top();
+			var right = this.right();
+			var left = this.left();
+			var bottom = this.bottom();
+
+			ctx.moveTo(this.x, top);
+			ctx.lineTo(right, this.y);
+			ctx.lineTo(this.x, bottom);
+			ctx.lineTo(left, this.y);
+			ctx.lineTo(this.x, top);
+		}
+
+		function platformBush() {
+			var top = this.top();
+			var right = this.right();
+			var left = this.left();
+			var bottom = this.bottom();
+
+			ctx.moveTo(left, bottom);
+			ctx.quadraticCurveTo(this.x, this.y, left, top);
+			ctx.lineTo(right, top);
+			ctx.quadraticCurveTo(this.x, this.y, right, bottom);
+			ctx.lineTo(left, bottom);
+		}
+
+		function superBush() {
+			ctx.arc(this.x, this.y, this.size + 0.5 * Math.sin(game.tick / 7), 0, Math.PI * 2);
+		}
+
+		var normalCount = 0;
+		var legCount = 0;
+		var platformCount = 0;
+		for (var i = -canvas.width; i < canvas.width * 2; ++i) {
+			if (Math.random() < 0.01) {
+				game.mobs.push(new Bush(i, canvas.height - 10, 20));
+				// don't put bushes too close together
+				i += 30;
+				normalCount++;
 			}
-			i += 30;
 		}
-	}
-	for (var i = -1; i <= 1; ++i) {
-		game.mobs.push(new Bush(i * canvas.width + game.player.x, canvas.height - 150, 20, superBush, 'super'));
-	}
+		for (var i = -canvas.width; i < canvas.width * 2; ++i) {
+			if (Math.random() < 0.003) {
+				if (Math.random() < 0.5) {
+					game.mobs.push(new Bush(i, canvas.height - 70, 15, diamondBush, 'legs'));
+					legCount++;
+				} else {
+					game.mobs.push(new Bush(i, canvas.height - 70, 15, platformBush, 'platform'));
+					platformCount++;
+				}
+				i += 30;
+			}
+		}
+		for (var i = -1; i <= 1; ++i) {
+			game.mobs.push(new Bush(i * canvas.width + game.player.x, canvas.height - 150, 20, superBush, 'super'));
+		}
 
-	//game.player.eat(new Berry(1, 2, 3, null, 'wings'));
+		//game.player.eat(new Berry(1, 2, 3, null, 'wings'));
 
-	if (normalCount < 5 || legCount < 3 || platformCount < 2) {
-		setupGameWorld();
+		if (normalCount < 5 || legCount < 3 || platformCount < 2) {
+			setupGameWorld();
+		}
+	} else if (game.mode == 'title') {
+		game.mobs = [];
+		game.mobs.push(new Critter(canvas.width/2, y, width, height));
+		game.mobs.push(new Critter(100, y, width, height));
+		game.mobs.push(new Critter(500, y, width, height));
+		game.mobs[0].eat(new Berry('meh', 'ignore', 'this', null, 'legs'));
+		game.mobs[1].eat(new Berry('meh', 'ignore', 'this', null, 'legs'));
+		game.mobs[1].eat(new Berry('meh', 'ignore', 'this', null, 'legs'));
+		game.mobs[2].eat(new Berry('meh', 'ignore', 'this', null, 'legs'));
+		game.mobs[2].eat(new Berry('meh', 'ignore', 'this', null, 'legs'));
+		game.mobs[2].eat(new Berry('meh', 'ignore', 'this', null, 'platform'));
+		game.mobs.push(new Critter(200, y, width, height));
+		game.mobs.push(new Critter(400, y, width, height));
 	}
 }
 
@@ -101,6 +118,12 @@ function runGame() {
 }
 
 function updateGame() {
+	if (game.mode == 'title') {
+		if (keysHeld.enter || keysHeld.space) {
+			game.mode = 'play';
+			setupGameWorld();
+		}
+	}
 	game.mobs.forEach(function(mob) {
 		mob.update();
 	});
@@ -113,7 +136,9 @@ function renderGame() {
 
 	ctx.save();
 
-	ctx.translate(-game.player.x + canvas.width/2, 0);
+	if (game.mode == 'play') {
+		ctx.translate(-game.player.x + canvas.width/2, 0);
+	}
 	
 	var layers = [];
 	game.mobs.forEach(function(mob) {
@@ -130,8 +155,22 @@ function renderGame() {
 
 	ctx.restore();
 	
-	ctx.font = '18px Arial';
-	ctx.fillText('Critters: ' + game.critterCount, 10, 25);
+	if (game.mode == 'play') {
+		ctx.textAlign = 'left';
+		ctx.font = '18px Arial';
+		ctx.fillText('Critters: ' + game.critterCount, 10, 25);
+	} if (game.mode == 'title') {
+		ctx.textAlign = 'center';
+		var middle = canvas.width/2;
+
+		ctx.font = '30px Arial';
+		ctx.fillText('Polymorphic Menagerie', middle, 50);
+		ctx.font = '20px Arial';
+		ctx.fillText('What will you grow?', middle, 80);
+
+		ctx.font = '14px Arial';
+		ctx.fillText('Press ENTER to start', middle, canvas.height/2);
+	}
 }
 
 function clearScreen() {

@@ -6,6 +6,8 @@ var keyMap = {
 
 	32: "space",
 
+	13: "enter",
+
 	65: "a",
 	66: "b",
 	67: "c",
