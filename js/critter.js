@@ -115,6 +115,16 @@ Critter.prototype.eat = function(berry) {
 		baby.size = newSize;
 		baby.shapeshift(this);
 		game.mobs.push(baby);
+	} else if (this.top() < 0) {
+		this.height /= 2;
+		this.body.y /= 2;
+		var newSize = this.size / 2;
+		this.size = newSize;
+		var side = Math.random() <= 0.5 ? -1 : 1;
+		var baby = new Critter(this.x + this.width * 1.3 * side, this.y, this.width, this.height);
+		baby.size = newSize;
+		baby.shapeshift(this);
+		game.mobs.push(baby);
 	}
 
 	this.lastEat = game.tick;
